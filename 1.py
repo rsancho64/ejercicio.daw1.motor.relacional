@@ -1,32 +1,38 @@
 from isSet import isSet
+from indexes import indexes
 
-def isValid(tablaRelacional):
-    """estado valido de una tabla:
-            los metadatos son un set AND
-            todo dato tiene la cantidad de elementos correcta
-                (la longitud de los metadatos)
-    """
-    header = tablaRelacional[0]
-    if not isSet(header):
-        return False
-    length = len(header)
-    for row in tablaRelacional[1:]:
-        if len(row) != length:
+
+class tablaRelacional:
+
+    def __init__(self, rawList):
+        if not self.isValid(rawList):
+            return None
+        self.schema = rawList[0]
+        self.data = rawList[1:]
+
+    def isValid(self, tablaRelacional):
+        """estado valido de una tabla:
+                los metadatos son un set AND
+                todo dato tiene la cantidad de elementos correcta
+                    (la longitud de los metadatos)
+        """
+        header = tablaRelacional[0]
+        if not isSet(header):
             return False
-    return True
+        length = len(header)
+        for row in tablaRelacional[1:]:
+            if len(row) != length:
+                return False
+        return True
 
-def indexes(Lista, sublista):
-    """lista de los indices de posicion 
-        de los datos de una sublista 
-        en una Lista (busca items de sublista en Lista)"""
-    resultado = []
-    for item in sublista:
-        if item in Lista:
-            resultado.append(Lista.index(item))
-    return resultado
+    def __str__(self, rawList):
+        """nice MD format"""
+        return "TO DO"
+
 
 if __name__ == "__main__":
 
+    # relational schema + population as rawList
     emp = [
         ["nombre", "edad", "jefe"],
         ["marta", 22, "andres"],
@@ -35,16 +41,8 @@ if __name__ == "__main__":
         ["juan", 45, None]
     ]
 
-    print(isValid(emp))
-    print(emp)  # TODO: bonito con tabla markdown
-
-    print(indexes(emp[0], ["nombre", "edad", "jefe"]))
-    print(indexes(emp[0], ["nombre", "jefe"]))
-    print(indexes(emp[0], ["edad", "jefe"]))
-    print(indexes(emp[0], ["jefe", "nombre"]))
-    print(indexes(emp[0], ["jefe", "nombre", "jefe",]))      
-    print(indexes(emp[0], ["nombre"]))
-    print(indexes(emp[0], []))
+    tr = tablaRelacional(emp)
+    print(tr.__str__())
 
     # print(select(emp,["edad"])
     # print(select(emp,["jefe"])
