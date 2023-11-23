@@ -1,5 +1,8 @@
+#! /usr/bin/phthon3
+
 from isSet import isSet
-from indexes import indexes
+# from indexes import indexes
+from py_markdown_table.markdown_table import markdown_table
 
 
 class tablaRelacional:
@@ -8,7 +11,7 @@ class tablaRelacional:
         if not self.isValid(rawList):
             return None
         self.schema = rawList[0]
-        self.data = rawList[1:]
+        self.rows = rawList[1:]
 
     def isValid(self, tablaRelacional):
         """estado valido de una tabla:
@@ -25,9 +28,18 @@ class tablaRelacional:
                 return False
         return True
 
-    def __str__(self, rawList):
-        """nice MD format"""
-        return "TO DO"
+    def basicJsonFormat(self):
+        """fmt as list of dicts"""
+        dd = []
+        for r in self.rows:
+            dd.append(dict(zip(self.schema, r)))
+        return dd
+
+    def __str__(self):
+        """nice MD format:
+        https://pypi.org/project/py-markdown-table/
+        """
+        return markdown_table(self.basicJsonFormat()).get_markdown()
 
 
 if __name__ == "__main__":
@@ -42,7 +54,8 @@ if __name__ == "__main__":
     ]
 
     tr = tablaRelacional(emp)
-    print(tr.__str__())
+    print(tr)
+    print(tr.basicJsonFormat())
 
     # print(select(emp,["edad"])
     # print(select(emp,["jefe"])
